@@ -26,34 +26,25 @@ namespace Questao5.Infrastructure.Services.Controllers
 
         [HttpPost]
         [Route("movimentacao")]
-        [SwaggerRequestExample(typeof(MovimentacaoCommand), typeof(MovimentacaoCommandExample))]
+        [SwaggerRequestExample(typeof(MovimentacaoCommandRequest), typeof(MovimentacaoCommandExample))]
         [SwaggerResponseExample(200, typeof(MovimentacaoCommandResultExamples))]
         [ProducesResponseType(typeof(MovimentacaoCommandResult), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(MovimentacaoCommandResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> RequestMovimentacao([FromBody] MovimentacaoCommand commandRequest)
+        public async Task<IActionResult> RequestMovimentacao([FromBody] MovimentacaoCommandRequest commandRequest)
         {
             var movimentacao = await _mediator.Send(commandRequest);
 
-            if (movimentacao.IsSucess)
-                return Ok(movimentacao);
-            else
-                return BadRequest(movimentacao);
+            return movimentacao.IsSucess ? Ok(movimentacao) : BadRequest(movimentacao);
         }
 
         [HttpGet]
         [Route("saldo")]
-        [SwaggerRequestExample(typeof(SaldoCommand), typeof(SaldoCommandExample))]
         [SwaggerResponseExample(200, typeof(SaldoCommandCommandResultExamples))]
-        [ProducesResponseType(typeof(SaldoCommandResult), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(SaldoCommandResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> RequestSaldo([FromQuery] SaldoCommand commandRequest)
+        [ProducesResponseType(typeof(SaldoQueryResult), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> RequestSaldo([FromQuery] SaldoQueryRequest commandRequest)
         {
             var movimentacao = await _mediator.Send(commandRequest);
 
-            if (movimentacao.IsSucess)
-                return Ok(movimentacao);
-            else
-                return BadRequest(movimentacao);
+            return movimentacao.IsSucess ? Ok(movimentacao) : BadRequest(movimentacao);
         }
     }
 }

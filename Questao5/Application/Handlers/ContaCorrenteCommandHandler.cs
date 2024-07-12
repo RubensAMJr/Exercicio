@@ -6,8 +6,8 @@ using System.Net;
 
 namespace Questao5.Application.Handlers
 {
-    public class ContaCorrenteCommandHandler : IRequestHandler<MovimentacaoCommand, MovimentacaoCommandResult>,
-                                               IRequestHandler<SaldoCommand,SaldoCommandResult>
+    public class ContaCorrenteCommandHandler : IRequestHandler<MovimentacaoCommandRequest, MovimentacaoCommandResult>,
+                                               IRequestHandler<SaldoQueryRequest,SaldoQueryResult>
     {
         private readonly IContaCorrenteDataStore _contaCorrenteDataStore;
 
@@ -16,7 +16,7 @@ namespace Questao5.Application.Handlers
             _contaCorrenteDataStore = contaCorrenteDataStore;
         }
 
-        public async Task<MovimentacaoCommandResult> Handle(MovimentacaoCommand command, CancellationToken cancellationToken)
+        public async Task<MovimentacaoCommandResult> Handle(MovimentacaoCommandRequest command, CancellationToken cancellationToken)
         {
             if (command.TipoMovimentacao != 'C' && command.TipoMovimentacao != 'D')
                 return new MovimentacaoCommandResult { Message = "INVALID_TYPE" };
@@ -37,7 +37,7 @@ namespace Questao5.Application.Handlers
             }
         }
 
-        public async Task<SaldoCommandResult> Handle(SaldoCommand command, CancellationToken cancellationToken)
+        public async Task<SaldoQueryResult> Handle(SaldoQueryRequest command, CancellationToken cancellationToken)
         {
             return await _contaCorrenteDataStore.ConsultarSaldo(command);
         }

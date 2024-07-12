@@ -4,10 +4,10 @@ namespace Questao5.Domain.Entities.ContaCorrente.Interfaces
 {
     public interface IContaCorrenteDataStore
     {
-        Task<MovimentacaoCommandResult> GravarMovimentacao(MovimentacaoCommand command);
+        Task<MovimentacaoCommandResult> GravarMovimentacao(MovimentacaoCommandRequest command);
         Task<string> VerificarChaveIdempotencia(string chaveIdempotencia);
 
         void GravarIdempotencia(string chaveIdempotencia, string requisicao, string resultado);
-        Task<SaldoCommandResult> ConsultarSaldo(SaldoCommand command);
+        Task<SaldoQueryResult> ConsultarSaldo(SaldoQueryRequest command);
     }
 }

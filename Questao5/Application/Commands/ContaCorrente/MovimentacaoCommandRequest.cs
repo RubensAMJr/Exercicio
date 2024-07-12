@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Questao5.Application.Commands.ContaCorrente
 {
-    public class MovimentacaoCommand : IRequest<MovimentacaoCommandResult>
+    public class MovimentacaoCommandRequest : IRequest<MovimentacaoCommandResult>
     {
         public string ChaveIdempotencia { get; set; }
         public string IdContaCorrente { get; set; }

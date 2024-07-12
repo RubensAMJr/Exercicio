@@ -3,16 +3,24 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace Questao5.Infrastructure.Services.Controllers.SwaggerExamples
 {
-    public class MovimentacaoCommandExample : IMultipleExamplesProvider<MovimentacaoCommand>
+    public class MovimentacaoCommandExample : IMultipleExamplesProvider<MovimentacaoCommandRequest>
     {
-        public IEnumerable<SwaggerExample<MovimentacaoCommand>> GetExamples()
+        public IEnumerable<SwaggerExample<MovimentacaoCommandRequest>> GetExamples()
         {
-            yield return SwaggerExample.Create("Movimentação de Conta Corrente - Crédito", new MovimentacaoCommand()
+            yield return SwaggerExample.Create("Movimentação de Conta Corrente - Crédito", new MovimentacaoCommandRequest()
             {
                ChaveIdempotencia = "A7689C18-2377-4B7D-8D7F-0FE655C1A289",
                IdContaCorrente = "E58F9B3F-4F4F-47B0-A2E0-0E6A0F30A5AD",
-               TipoMovimentacao = 'c',
+               TipoMovimentacao = 'C',
                ValorMovimentacao = 300
+            });
+
+            yield return SwaggerExample.Create("Movimentação de Conta Corrente - Débito", new MovimentacaoCommandRequest()
+            {
+                ChaveIdempotencia = "A7689C18-2377-4B7D-8D7F-0FE655C1A289",
+                IdContaCorrente = "E58F9B3F-4F4F-47B0-A2E0-0E6A0F30A5AD",
+                TipoMovimentacao = 'D',
+                ValorMovimentacao = 300
             });
         }
     }

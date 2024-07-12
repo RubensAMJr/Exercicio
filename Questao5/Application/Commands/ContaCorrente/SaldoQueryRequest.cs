@@ -2,7 +2,7 @@
 
 namespace Questao5.Application.Commands.ContaCorrente
 {
-    public class SaldoCommand : IRequest<SaldoCommandResult>
+    public class SaldoQueryRequest : IRequest<SaldoQueryResult>
     {
         public string IdContaCorrente { get; set; }
     }

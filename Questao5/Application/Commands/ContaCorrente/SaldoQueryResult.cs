@@ -2,7 +2,7 @@
 
 namespace Questao5.Application.Commands.ContaCorrente
 {
-    public class SaldoCommandResult
+    public class SaldoQueryResult
     {
         [JsonIgnore]
         public bool IsSucess { get; set; }

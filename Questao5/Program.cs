@@ -27,6 +27,7 @@ builder.Services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerExamples();
+builder.Services.AddSwaggerExamplesFromAssemblies();
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
 builder.Services.AddSwaggerGen(config =>

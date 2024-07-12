@@ -13,7 +13,7 @@ namespace Questao5.Infrastructure.Database.DataStore
             _dataContext = dataContext;
         }
 
-        public async Task<MovimentacaoCommandResult> GravarMovimentacao(MovimentacaoCommand command)
+        public async Task<MovimentacaoCommandResult> GravarMovimentacao(MovimentacaoCommandRequest command)
         {
             var validacao_conta = await ValidarConta(command.IdContaCorrente);
 
@@ -36,7 +36,7 @@ namespace Questao5.Infrastructure.Database.DataStore
                   });
         }
 
-        private async Task<Guid> InserirMovimentacao(MovimentacaoCommand command)
+        private async Task<Guid> InserirMovimentacao(MovimentacaoCommandRequest command)
         {
             var id_movimento = Guid.NewGuid();
             await _dataContext.GetConnecion().ExecuteAsync(
@@ -73,7 +73,7 @@ namespace Questao5.Infrastructure.Database.DataStore
                       resultado = resultado,
                   });
         }
-        public async Task<SaldoCommandResult> ConsultarSaldo(SaldoCommand command)
+        public async Task<SaldoQueryResult> ConsultarSaldo(SaldoQueryRequest command)
         {
             var validacao_conta = await ValidarConta(command.IdContaCorrente);
 
@@ -82,12 +82,12 @@ namespace Questao5.Infrastructure.Database.DataStore
                return await ConsultarSaldoTotal(command);
             }
             else
-                return new SaldoCommandResult { Message = $"{validacao_conta}" };
+                return new SaldoQueryResult { Message = $"{validacao_conta}" };
         }
 
-        private async Task<SaldoCommandResult> ConsultarSaldoTotal(SaldoCommand command)
+        private async Task<SaldoQueryResult> ConsultarSaldoTotal(SaldoQueryRequest command)
         {
-            var saldoTotal = await _dataContext.GetConnecion().QueryFirstOrDefaultAsync<SaldoCommandResult>(
+            var saldoTotal = await _dataContext.GetConnecion().QueryFirstOrDefaultAsync<SaldoQueryResult>(
                   SQL_VERIFICA_SALDO,
                   new
                   {
