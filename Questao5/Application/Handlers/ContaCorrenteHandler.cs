@@ -6,12 +6,12 @@ using System.Net;
 
 namespace Questao5.Application.Handlers
 {
-    public class ContaCorrenteCommandHandler : IRequestHandler<MovimentacaoCommandRequest, MovimentacaoCommandResult>,
+    public class ContaCorrenteHandler : IRequestHandler<MovimentacaoCommandRequest, MovimentacaoCommandResult>,
                                                IRequestHandler<SaldoQueryRequest,SaldoQueryResult>
     {
         private readonly IContaCorrenteDataStore _contaCorrenteDataStore;
 
-        public ContaCorrenteCommandHandler(IContaCorrenteDataStore contaCorrenteDataStore)
+        public ContaCorrenteHandler(IContaCorrenteDataStore contaCorrenteDataStore)
         {
             _contaCorrenteDataStore = contaCorrenteDataStore;
         }
@@ -20,7 +20,7 @@ namespace Questao5.Application.Handlers
         {
             if (command.TipoMovimentacao != 'C' && command.TipoMovimentacao != 'D')
                 return new MovimentacaoCommandResult { Message = "INVALID_TYPE" };
-            else if (command.ValorMovimentacao < 1)
+            else if (command.ValorMovimentacao < 0.00M)
                 return new MovimentacaoCommandResult { Message = "INVALID_VALUE" };
 
             var IdMovimentacao = await _contaCorrenteDataStore.VerificarChaveIdempotencia(command.ChaveIdempotencia);
@@ -33,7 +33,7 @@ namespace Questao5.Application.Handlers
             }
             else
             {
-                return new MovimentacaoCommandResult { Message = HttpStatusCode.OK.ToString(),IdMovimentacao = IdMovimentacao};
+                return new MovimentacaoCommandResult { IsSucess = true, Message = HttpStatusCode.OK.ToString(),IdMovimentacao = IdMovimentacao};
             }
         }
 

@@ -93,7 +93,7 @@ namespace Questao5.Infrastructure.Database.DataStore
                   {
                       idContaCorrente = command.IdContaCorrente
                   });
-            saldoTotal.DataConsulta = DateTime.Now.ToString("HH:mm");
+            saldoTotal.DataConsulta = DateTime.Now.ToString("dd/MM/yyyy : HH:mm");
             saldoTotal.Message = HttpStatusCode.OK.ToString();
             return saldoTotal;
         }

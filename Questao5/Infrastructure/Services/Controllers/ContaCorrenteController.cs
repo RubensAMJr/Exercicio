@@ -12,7 +12,6 @@ namespace Questao5.Infrastructure.Services.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
-    [ExcludeFromCodeCoverage]
     public class ContaCorrenteController : ControllerBase
     {
         private readonly ILogger<ContaCorrenteController> _logger;
