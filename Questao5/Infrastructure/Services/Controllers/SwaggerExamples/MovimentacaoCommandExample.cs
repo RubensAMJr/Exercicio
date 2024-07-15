@@ -9,18 +9,18 @@ namespace Questao5.Infrastructure.Services.Controllers.SwaggerExamples
         {
             yield return SwaggerExample.Create("Movimentação de Conta Corrente - Crédito", new MovimentacaoCommandRequest()
             {
-               ChaveIdempotencia = "A7689C18-2377-4B7D-8D7F-0FE655C1A289",
-               IdContaCorrente = "E58F9B3F-4F4F-47B0-A2E0-0E6A0F30A5AD",
+               ChaveIdempotencia = Guid.NewGuid().ToString(),
+               IdContaCorrente = Guid.NewGuid().ToString(),
                TipoMovimentacao = 'C',
                ValorMovimentacao = 300
             });
 
             yield return SwaggerExample.Create("Movimentação de Conta Corrente - Débito", new MovimentacaoCommandRequest()
             {
-                ChaveIdempotencia = "A7689C18-2377-4B7D-8D7F-0FE655C1A289",
-                IdContaCorrente = "E58F9B3F-4F4F-47B0-A2E0-0E6A0F30A5AD",
+                ChaveIdempotencia = Guid.NewGuid().ToString(),
+                IdContaCorrente = Guid.NewGuid().ToString(),
                 TipoMovimentacao = 'D',
-                ValorMovimentacao = 300
+                ValorMovimentacao = -300
             });
         }
     }

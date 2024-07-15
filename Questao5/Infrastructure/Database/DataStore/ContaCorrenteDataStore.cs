@@ -15,20 +15,18 @@ namespace Questao5.Infrastructure.Database.DataStore
 
         public async Task<MovimentacaoCommandResult> GravarMovimentacao(MovimentacaoCommandRequest command)
         {
-            var validacao_conta = await ValidarConta(command.IdContaCorrente);
+            var validacao_conta = await ContaValidaExiste(command.IdContaCorrente);
 
-            if (validacao_conta == "VALID_ACCOUNT")
-            {
-                var id_movimento = await InserirMovimentacao(command);
-                return new MovimentacaoCommandResult { Message = HttpStatusCode.OK.ToString(), IdMovimentacao = id_movimento.ToString() };
-            }
-            else
-                return new MovimentacaoCommandResult { Message = $"{validacao_conta}"};
+            if(validacao_conta != true)
+               return new MovimentacaoCommandResult { Message = validacao_conta == null ? "INVALID_ACCOUNT" : "INACTIVE_ACCOUNT" , IsSucess = false};
+
+            var id_movimento = await InserirMovimentacao(command);
+            return new MovimentacaoCommandResult { Message = HttpStatusCode.OK.ToString(), IdMovimentacao = id_movimento.ToString(), IsSucess = true };
         }
 
-        private async Task<string> ValidarConta(string idContaCorrente)
+        private async Task<bool?> ContaValidaExiste(string idContaCorrente)
         {
-            return await _dataContext.GetConnecion().QueryFirstOrDefaultAsync<string>(
+            return await _dataContext.GetConnecion().QueryFirstOrDefaultAsync<bool?>(
                   SQL_VERIFICA_CONTA_VALIDA,
                   new
                   {
@@ -75,14 +73,12 @@ namespace Questao5.Infrastructure.Database.DataStore
         }
         public async Task<SaldoQueryResult> ConsultarSaldo(SaldoQueryRequest command)
         {
-            var validacao_conta = await ValidarConta(command.IdContaCorrente);
+            var validacao_conta = await ContaValidaExiste(command.IdContaCorrente);
 
-            if (validacao_conta == "VALID_ACCOUNT")
-            {
-               return await ConsultarSaldoTotal(command);
-            }
-            else
-                return new SaldoQueryResult { Message = $"{validacao_conta}" };
+            if (validacao_conta != true)
+                return new SaldoQueryResult { Message = validacao_conta == null ? "INVALID_ACCOUNT" : "INACTIVE_ACCOUNT" , IsSucess = false};
+
+            return await ConsultarSaldoTotal(command);
         }
 
         private async Task<SaldoQueryResult> ConsultarSaldoTotal(SaldoQueryRequest command)
@@ -112,17 +108,11 @@ namespace Questao5.Infrastructure.Database.DataStore
           VALUES (@chave_idempotencia,@requisicao,@resultado)";
 
         private const string SQL_VERIFICA_CONTA_VALIDA =
-        @"SELECT CASE WHEN EXISTS (SELECT 1 FROM contacorrente WHERE idcontacorrente = @idContaCorrente) THEN
-                        CASE
-                            WHEN (SELECT ativo FROM contacorrente WHERE idcontacorrente = @idContaCorrente) = 0 THEN 'INACTIVE_ACCOUNT'
-                            ELSE 'VALID_ACCOUNT'
-                        END
-                        ELSE 'INVALID_ACCOUNT'
-          END AS CONTA_CORRENTE";
+        @"SELECT ATIVO FROM CONTACORRENTE WHERE IDCONTACORRENTE = @idContaCorrente";
 
         private const string SQL_VERIFICA_SALDO =
         @"SELECT c.Numero AS NumeroContaCorrente,c.Nome AS Titular,
-          SUM(CASE WHEN m.tipomovimento = 'C' THEN m.valor ELSE -m.valor END) AS ValorSaldo
+          SUM(m.valor) AS ValorSaldo
           FROM contacorrente c
           LEFT JOIN movimento m ON c.idcontacorrente = m.idcontacorrente
           WHERE c.idcontacorrente = @idContaCorrente
