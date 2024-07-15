@@ -91,6 +91,7 @@ namespace Questao5.Infrastructure.Database.DataStore
                   });
             saldoTotal.DataConsulta = DateTime.Now.ToString("dd/MM/yyyy : HH:mm");
             saldoTotal.Message = HttpStatusCode.OK.ToString();
+            saldoTotal.IsSucess = true;
             return saldoTotal;
         }
 
